@@ -1,4 +1,4 @@
-# AI_Project
+# Feedback Recorder
 Feedback Recorder
 
 1.	This project is a GUI application written in python which will record the speech of the user and converts the recorded audio into speech and saves it into a .txt file
