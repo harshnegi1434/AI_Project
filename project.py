@@ -3,16 +3,18 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import simpledialog
 from textblob import TextBlob
-from textblob import Word
-import nltk
 import threading
 import pyaudio
 import wave
-import sounddevice as sd 
-import soundfile as sf
 import speech_recognition as sr
 import json
 import requests
+
+# importing the libraries for Google API Console and performing OAuth2.0 
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+gauth = GoogleAuth()           
+drive = GoogleDrive(gauth)  
 
 project = tk.Tk()
 
@@ -58,11 +60,19 @@ class Voice_rec():
             wf.writeframes(b''.join(self.frames))
             wf.close()
             messagebox.showinfo("Done", "Your Recording Is Saved !" )
-            #Now The File Will Be Uploaded To Google Drive 
-            headers = {"Authorization": "Bearer ya29.a0AfH6SMAm4nucuchXFEi1BUzp9d7GMtgIi4cr01JNBrxXTM9ETw70ysoX9Sk6UaAXjTIkkYzCoMnyjBbJMfs7eO7FQ89It2dvMWxEHlBlDfrEbtJ0Sj1_bRndLrP0DsSGUg04VobMrj4r-GKIpJvtuSSHP1ylTOU52Gd-UMipGaw"}
-            para = {"name" : self.filename}
-            files = {'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'), 'file': open(self.filename, "rb") }
-            r = requests.post("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", headers=headers, files=files)
+            # Now The File Will Be Uploaded To Google Drive (Old Method) 
+            # headers = {"Authorization": "Bearer ya29.a0AfH6SMAm4nucuchXFEi1BUzp9d7GMtgIi4cr01JNBrxXTM9ETw70ysoX9Sk6UaAXjTIkkYzCoMnyjBbJMfs7eO7FQ89It2dvMWxEHlBlDfrEbtJ0Sj1_bRndLrP0DsSGUg04VobMrj4r-GKIpJvtuSSHP1ylTOU52Gd-UMipGaw"}
+            # para = {"name" : self.filename}
+            # files = {'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'), 'file': open(self.filename, "rb") }
+            # r = requests.post("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", headers=headers, files=files)
+            
+            # File Uploding To Google Drive (New Method)
+            upload_file = self.filename
+            gfile = drive.CreateFile({'parents': [{'id': '1CceM5ciKPhcfxy8tMx5Rbs14V-WhKNK4'}]})
+            # Read file and set it as the content of this instance.
+            gfile.SetContentFile(upload_file)
+            gfile.Upload() 
+
             messagebox.showinfo("Success !", "Your File Has Been Uploaded To Google Drive!")
 
         def record(self):
@@ -96,11 +106,19 @@ def Speech_To_Text():
         file.write("\n")
         file.write(result)
     
-    #Now The File Will Be Uploaded To Google Drive    
-    headers = {"Authorization": "Bearer ya29.a0AfH6SMAm4nucuchXFEi1BUzp9d7GMtgIi4cr01JNBrxXTM9ETw70ysoX9Sk6UaAXjTIkkYzCoMnyjBbJMfs7eO7FQ89It2dvMWxEHlBlDfrEbtJ0Sj1_bRndLrP0DsSGUg04VobMrj4r-GKIpJvtuSSHP1ylTOU52Gd-UMipGaw"}
-    para = {"name" : "Feedback_Form.txt",}
-    files = {'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'), 'file': open("./Feedback_Form.txt", "rb") }
-    R = requests.post("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", headers=headers, files=files)
+    # Now The File Will Be Uploaded To Google Drive (Old Method) 
+    # headers = {"Authorization": "Bearer ya29.a0AfH6SMAm4nucuchXFEi1BUzp9d7GMtgIi4cr01JNBrxXTM9ETw70ysoX9Sk6UaAXjTIkkYzCoMnyjBbJMfs7eO7FQ89It2dvMWxEHlBlDfrEbtJ0Sj1_bRndLrP0DsSGUg04VobMrj4r-GKIpJvtuSSHP1ylTOU52Gd-UMipGaw"}       
+    # para = {"name" : self.filename}
+    # files = {'data': ('metadata', json.dumps(para), 'application/json; charset=UTF-8'), 'file': open(self.filename, "rb") }
+    # r = requests.post("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", headers=headers, files=files)
+            
+    # File Uploding To Google Drive (New Method)
+    upload_file = 'Feedback_Form.txt'
+    gfile = drive.CreateFile({'parents': [{'id': '1CceM5ciKPhcfxy8tMx5Rbs14V-WhKNK4'}]})
+    # Read file and set it as the content of this instance.
+    gfile.SetContentFile(upload_file)
+    gfile.Upload() 
+        
     messagebox.showinfo("Success !", "Your File Has Been Uploaded To Google Drive!")
     
 #Opening a New Window For Choosing The Speech Option
