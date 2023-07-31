@@ -1,7 +1,7 @@
 # Feedback Recorder
 
 [Demo Link](https://youtu.be/WgItQOfO52E) <br>
-[Project Description](https://drive.google.com/file/d/1hYZRjta7sR_3JcsEuMt14jo7tWJtkVH9/view?usp=sharing)
+[Project Description](https://docs.google.com/document/d/1Vd-CNBvSdM_gBSPYHmUhbw7LAumkotVD/edit?usp=drive_link&ouid=106034686260541721462&rtpof=true&sd=true)
 
 1. This project is a GUI application written in python which will record the speech of the user and converts the recorded audio into speech and saves it into a .txt file
 2. Along with the text conversion, the application also detects the sentiments (either positive, negative or neutral) and mentions in the file.
